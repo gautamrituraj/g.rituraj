@@ -370,7 +370,18 @@ footer .inner {
   align-items: center;
   gap: 12px;
 }
-footer .counter img { max-width: 100%; height: auto; opacity: .85; }
+/* Visitor counter: loaded (so visits are counted) but not visible.
+   Not display:none, so every browser still requests the image. */
+.counter-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  pointer-events: none;
+}
 
 /* ---------- Responsive ---------- */
 @media (max-width: 1000px) {
