@@ -219,8 +219,14 @@
           </div>
           <p class="org"><a href="https://www.tudelft.nl/en/eemcs/research/facilities/esp-lab/about-the-esp-lab" target="_blank" rel="noopener">ESP Lab, DCE&amp;S group</a>, <a href="https://www.tudelft.nl/en/eemcs/the-faculty/departments/electrical-sustainable-energy/" target="_blank" rel="noopener">Department of Electrical Sustainable Energy</a>, and <a href="https://www.thegreenvillage.org/" target="_blank" rel="noopener">The Green Village (Field Lab), TU Delft, the Netherlands</a></p>
           <ul class="dots">
+            <li>Own operation, research, and maintenance of the green hydrogen production system at The Green Village demonstration site.</li>
+            <li>Develop digital twins of an energy hub for electric trucks and provide technical support across the FLEXINet and Drive2X projects.</li>
+            <li>Mentor PhD candidates through hardware development and experimental campaigns in the ESP Lab, covering build, bring-up, and measurement.</li>
+            <li>Mentor the wireless charging laboratory for first-year bachelor students, translating WPT fundamentals into hands-on experiments.</li>
+            <!-- Previous wording:
             <li>System management of a 2.5 kW Electrolyzer-integrated Fuel-Cell Green Hydrogen (24/7 Energy Hub) at The Green Village for its proper operation.</li>
             <li>Developing a digital-twin Hardware-in-the-Loop of a 100 kW medium voltage Energy Hub for electric truck charging in the ESP Lab.</li>
+            -->
           </ul>
         </li>
 
@@ -551,15 +557,39 @@
       var menu = document.getElementById('nav-links');
       var links = menu.querySelectorAll('a');
 
+      var openedAtY = 0;
+
+      function closeMenu() {
+        if (!menu.classList.contains('open')) return;
+        menu.classList.remove('open');
+        toggle.setAttribute('aria-expanded', 'false');
+      }
+
       toggle.addEventListener('click', function () {
         var open = menu.classList.toggle('open');
         toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+        openedAtY = window.scrollY;
       });
       links.forEach(function (a) {
-        a.addEventListener('click', function () {
-          menu.classList.remove('open');
-          toggle.setAttribute('aria-expanded', 'false');
-        });
+        a.addEventListener('click', closeMenu);
+      });
+
+      // Close the menu when clicking anywhere outside it
+      document.addEventListener('click', function (e) {
+        if (!menu.contains(e.target) && !toggle.contains(e.target)) closeMenu();
+      });
+
+      // Close the menu when the page is scrolled (ignores tiny movements)
+      window.addEventListener('scroll', function () {
+        if (Math.abs(window.scrollY - openedAtY) > 10) closeMenu();
+      }, { passive: true });
+
+      // Close the menu with the Esc key and return focus to the ☰ button
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && menu.classList.contains('open')) {
+          closeMenu();
+          toggle.focus();
+        }
       });
 
       // Highlight the nav link of the section in view
